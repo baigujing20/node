@@ -8,9 +8,7 @@ COPY package.json .
 
 EXPOSE 3000
 
-RUN apk update && apk upgrade &&\
-    apk add --no-cache openssl curl gcompat iproute2 coreutils &&\
-    apk add --no-cache bash &&\
+RUN apk add --no-cache openssl curl bash gcompat iproute2 coreutils &&\
     chmod +x app.js &&\
     npm install
 
