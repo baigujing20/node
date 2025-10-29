@@ -2,7 +2,7 @@ FROM node:20.11.1-alpine3.19
 
 WORKDIR /app
 
-COPY index.js .
+COPY app.js .
 
 COPY package.json .
 
@@ -14,4 +14,4 @@ RUN apk update && apk upgrade &&\
     chmod +x index.js &&\
     npm install
 
-CMD ["node", "index.js"]
+CMD ["node", "app.js"]
