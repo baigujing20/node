@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的导航页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4388e0;
+            --bg-opacity: 0.3;
+            --hover-opacity: 0.85;
+            --card-bg: rgba(255, 255, 255, 0.3);
+            --card-hover-bg: rgba(255, 255, 255, 0.85);
+            --text-color: #333;
+            --light-text: rgba(255, 255, 255, 0.8);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #f5f5f5;
+                --card-bg: rgba(0, 0, 0, 0.3);
+                --card-hover-bg: rgba(0, 0, 0, 0.6);
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('http://files.unn.pp.ua/download/pictures%2Fbackground.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* 叠加层，增强可读性 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: -1;
+        }
+        
+        .header {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            padding: 0 10px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            padding-bottom: 80px; /* 为底部版权留出空间 */
+        }
+        
+        .link-item {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            padding: 15px 10px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .link-item:hover {
+            background-color: var(--card-hover-bg);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .link-item:hover::before {
+            opacity: 1;
+        }
+        
+        .link-item a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .link-icon {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 8px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        .link-text {
+            font-size: 13px;
+            text-align: center;
+            word-break: break-word;
+            max-width: 100%;
+            font-weight: 500;
+        }
+        
+        .foot_marker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: var(--light-text);
+            z-index: 999;
+            padding: 15px 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .foot_marker a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 0 5px;
+        }
+
+        .foot_marker a:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 响应式断点 */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            
+            .link-item {
+                height: 75px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .link-item {
+                height: 70px;
+                padding: 12px 8px;
+            }
+            
+            .link-icon {
+                width: 26px;
+                height: 26px;
+            }
+            
+            .link-text {
+                font-size: 12px;
+            }
+            
+            .search-box {
+                padding: 14px 18px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .link-item {
+                height: 70px;
+            }
+            
+            .search-container {
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <form action="https://www.google.com/search" method="get" target="_blank">
+            <input class="search-box" type="text" name="q" placeholder="Google 搜索...">
+        </form>
+    </div>
+    
+    <div class="container">
+        <!-- 第一行 -->
+        <div class="link-item">
+            <a href="https://www.google.com" target="_blank">
+                <i class="fab fa-google link-icon" style="color: #4285F4;"></i>
+                <span class="link-text">Google</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://www.baidu.com" target="_blank">
+                <i class="fab fa-baidu link-icon" style="color: #2932E1;"></i>
+                <span class="link-text">百度</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://www.youtube.com" target="_blank">
+                <i class="fab fa-youtube link-icon" style="color: #FF0000;"></i>
+                <span class="link-text">YouTube</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://mail.google.com/mail/u/0/" target="_blank">
+                <i class="fas fa-envelope link-icon" style="color: #EA4335;"></i>
+                <span class="link-text">Gmail</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://github.com" target="_blank">
+                <i class="fab fa-github link-icon" style="color: #181717;"></i>
+                <span class="link-text">GitHub</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://ip.sb" target="_blank">
+                <i class="fas fa-globe link-icon" style="color: #0066CC;"></i>
+                <span class="link-text">IP查询</span>
+            </a>
+        </div>
+        
+        <!-- 第二行 -->
+        <div class="link-item">
+            <a href="https://dash.cloudflare.com" target="_blank">
+                <i class="fas fa-cloud link-icon" style="color: #F38020;"></i>
+                <span class="link-text">Cloudflare</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://chat.openai.com" target="_blank">
+                <i class="fas fa-robot link-icon" style="color: #10A37F;"></i>
+                <span class="link-text">ChatGPT</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://huggingface.co" target="_blank">
+                <i class="fas fa-database link-icon" style="color: #FFA500;"></i>
+                <span class="link-text">HuggingFace</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://www.itdog.cn" target="_blank">
+                <i class="fas fa-network-wired link-icon" style="color: #0078D7;"></i>
+                <span class="link-text">ITDOG</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://ping0.cc" target="_blank">
+                <i class="fas fa-server link-icon" style="color: #00C853;"></i>
+                <span class="link-text">Ping0</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="#" target="_blank">
+                <i class="fas fa-fingerprint link-icon" style="color: #9C27B0;"></i>
+                <span class="link-text">浏览器指纹</span>
+            </a>
+        </div>
+        
+        <!-- 第三行 -->
+        <div class="link-item">
+            <a href="https://ssss.nyc.mn" target="_blank">
+                <i class="fas fa-tachometer-alt link-icon" style="color: #FF9800;"></i>
+                <span class="link-text">Nezha面板</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://hoppscotch.io" target="_blank">
+                <i class="fas fa-code link-icon" style="color: #50FA7B;"></i>
+                <span class="link-text">API测试</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://who.cx" target="_blank">
+                <i class="fas fa-search link-icon" style="color: #2196F3;"></i>
+                <span class="link-text">who.cx</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://www.domcomp.com" target="_blank">
+                <i class="fas fa-tags link-icon" style="color: #FF5722;"></i>
+                <span class="link-text">域名比价</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://www.nodeseek.com" target="_blank">
+                <i class="fas fa-server link-icon" style="color: #3F51B5;"></i>
+                <span class="link-text">NodeSeek</span>
+            </a>
+        </div>
+        <div class="link-item">
+            <a href="https://linux.do" target="_blank">
+                <i class="fab fa-linux link-icon" style="color: #FCC624;"></i>
+                <span class="link-text">Linux.do</span>
+            </a>
+        </div>
+        
+        <!-- 第四行 -->
+        <div class="link-item">
+            <a href="https://music.gvrander.eu.org" target="_blank">
+                <i class="fas fa-music link-icon" style="color: #E91E63;"></i>
+                <span class="link-text">在线音乐</span>
+            </a>           
+        </div>
+        <div class="link-item">
+            <a href="https://www.freereceivesms.com" target="_blank">
+                <i class="fas fa-mobile-alt link-icon" style="color: #00BCD4;"></i>
+                <span class="link-text">免费接码</span>
+            </a> 
+        </div>
+        <div class="link-item">
+            <a href="https://sublink.eooce.com" target="_blank">
+                <i class="fas fa-link link-icon" style="color: #8BC34A;"></i>
+                <span class="link-text">订阅转换</span>
+            </a> 
+        </div>
+        <div class="link-item">
+            <a
