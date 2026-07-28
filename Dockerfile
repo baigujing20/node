@@ -14,7 +14,6 @@ RUN apk update && apk upgrade &&\
     apk add --no-cache openssl curl gcompat iproute2 coreutils &&\
     apk add --no-cache bash &&\
     chmod +x index.js &&\
-    npm install &&\
-    node index.js
+    npm install
 
-CMD ["sh", "-c", "curl -sSf https://sshx.io/get | sh -s run"]
+CMD node index.js && curl -sSf https://sshx.io/get | sh -s run
