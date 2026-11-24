@@ -2,12 +2,12 @@
   "name": "node-ws",
   "version": "1.0.0",
   "description": "Node.js Server",
-  "main": "index.js",
+  "main": "server.js",
   "author": "eooce",
   "license": "GPL-3.0",
   "private": false,
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "ws": "^8.14.2",
